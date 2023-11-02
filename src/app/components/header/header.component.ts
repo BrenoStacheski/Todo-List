@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { TodoFormComponent } from './todo-form/todo-form.component';
 
 @Component({
   selector: 'app-header',
@@ -18,8 +19,12 @@ import { MatDialogModule } from '@angular/material/dialog';
   styleUrls: []
 })
 export class HeaderComponent {
+  private dialogService = inject(MatDialog);
 
   handleOpenModel(): void {
-    alert('Adicionar nova tarefa')
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '50vw';
+    dialogConfig.maxHeight = '80vh;'
+    this.dialogService.open(TodoFormComponent, dialogConfig);
   }
 }
