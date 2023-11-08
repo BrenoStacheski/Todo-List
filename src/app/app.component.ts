@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoCardComponent } from './components/todo-card/todo-card.component';
 import { SchoolData, SchoolService } from './services/school.service';
-import { Observable, zip } from 'rxjs';
+import { Observable, from, map, of, zip } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -21,13 +21,53 @@ export class AppComponent implements OnInit {
     this.getStudentsData(),
     this.getTeacherData()
   );
+  private ages = of(20, 30, 40, 50, 60, 70);
+  private carData = from([
+    {
+      brand: 'Fiat',
+      model: 'Palio',
+      horsepower: 75
+    },
+    {
+      brand: 'Volkswagen',
+      model: 'Gol',
+      horsepower: 75
+    },
+    {
+      brand: 'Hyundai',
+      model: 'i30',
+      horsepower: 145
+    }
+  ]);
 
   constructor(
     private schoolService: SchoolService,
   ) { }
 
   ngOnInit(): void {
-    this.getSchoolData();
+    this.getMultipliedAges();
+    this.getCarModel();
+  }
+
+  public getMultipliedAges(): void {
+    this.ages
+      .pipe(
+        map((age) => age * 2)
+      ).subscribe({
+        next: (response) => {
+          console.log('IDADE MULTIPLICADO', response);
+        }
+      })
+  }
+
+  public getCarModel(): void {
+    this.carData.pipe(
+      map((car) => car.model)
+    ).subscribe({
+      next: (response) => {
+        console.log('modelos', response);
+      }
+    })
   }
 
   public getSchoolData(): void {
