@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoCardComponent } from './components/todo-card/todo-card.component';
@@ -14,6 +14,8 @@ import { Observable, from, map, of, zip } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  @Input() public projectName!: string;
+  @Output() public outputEvent = new EventEmitter<string>();
   public title = 'todo-list-16';
   public students: Array<SchoolData> = [];
   public teachers: Array<SchoolData> = [];
@@ -47,6 +49,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getMultipliedAges();
     this.getCarModel();
+  }
+
+  public handleEmitEvent(): void {
+    this.outputEvent.emit(this.projectName);
   }
 
   public getMultipliedAges(): void {
