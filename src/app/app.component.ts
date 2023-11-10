@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { TodoCardComponent } from './components/todo-card/todo-card.component';
 import { SchoolData, SchoolService } from './services/school.service';
 import { Observable, from, map, of, zip } from 'rxjs';
+import { TodoSignalsService } from './services/todo-signals.service';
+import { Todo } from './models/model/todo.model';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +15,7 @@ import { Observable, from, map, of, zip } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
   @Input() public projectName!: string;
   @Output() public outputEvent = new EventEmitter<string>();
@@ -41,9 +44,12 @@ export class AppComponent implements OnInit {
       horsepower: 145
     }
   ]);
+  public todoSignal!: WritableSignal<Array<Todo>>;
+  public renderTestMessage = false;
 
   constructor(
     private schoolService: SchoolService,
+    private todoSignalService: TodoSignalsService
   ) { }
 
   ngOnInit(): void {
@@ -53,6 +59,13 @@ export class AppComponent implements OnInit {
 
   public handleEmitEvent(): void {
     this.outputEvent.emit(this.projectName);
+  }
+
+  public handleCreateTodo(todo: Todo): void {
+    if (todo) {
+      this.todoSignalService.updateTodo(todo);
+      this.todoSignal = this.todoSignalService.todosState;
+    }
   }
 
   public getMultipliedAges(): void {
