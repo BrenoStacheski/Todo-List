@@ -46,6 +46,7 @@ export class AppComponent implements OnInit {
   ]);
   public todoSignal!: WritableSignal<Array<Todo>>;
   public renderTestMessage = false;
+  public isDoned = false;
 
   constructor(
     private schoolService: SchoolService,
@@ -66,6 +67,12 @@ export class AppComponent implements OnInit {
       this.todoSignalService.updateTodo(todo);
       this.todoSignal = this.todoSignalService.todosState;
     }
+  }
+
+  public handleCheckIsDone(): void {
+    setTimeout(() => {
+      this.isDoned = true;
+    }, 200);
   }
 
   public getMultipliedAges(): void {
